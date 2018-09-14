@@ -16,9 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.autocontrol.coc.cocautomanagement.imagesearch.ImagePHash;
+import com.autocontrol.coc.cocautomanagement.imagesearch.ResultXYBean;
+import com.autocontrol.coc.cocautomanagement.imagesearch.SearchImage;
+import com.autocontrol.coc.cocautomanagement.utils.GsonUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,23 +53,36 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         File externalStorageDirectory = Environment.getExternalStorageDirectory();
         System.out.println("内存卡路径" + externalStorageDirectory.getAbsolutePath());
         String path1 = externalStorageDirectory.getAbsolutePath() + "/cocl.png";
         String path2 = externalStorageDirectory.getAbsolutePath() + "/cocl-ai.png";
 
-        ImagePHash p = new ImagePHash();
-        String image1;
-        String image2;
-        try {
-            image1 = p.getHash(path1);
-            image2 = p.getHash(path2);
-            System.out.println("得分为 " + p.distance(image1, image2));
-        } catch (Exception e) {
-            Log.e("搓搓粗偶", e.toString());
-            e.printStackTrace();
-        }
+//        ImagePHash p = new ImagePHash();
+//        String image1;
+//        String image2;
+//        try {
+//            image1 = p.getHash(path1);
+//            image2 = p.getHash(path2);
+//            System.out.println("得分为 " + p.distance(image1, image2));
+//        } catch (Exception e) {
+//            Log.e("搓搓粗偶", e.toString());
+//            e.printStackTrace();
+//        }
+        long s = System.currentTimeMillis();
 
+        SearchImage searchImage = new SearchImage();
+        ArrayList<ResultXYBean> resultXYBeans = searchImage.searchImage(path1, path2);
+        System.out.println("得到的结果" + GsonUtil.GsonString(resultXYBeans));
+        long e = System.currentTimeMillis();
+        System.out.println("时间测试=" + (e - s));
     }
 
     @Override
