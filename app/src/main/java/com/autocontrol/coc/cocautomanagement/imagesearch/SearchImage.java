@@ -17,6 +17,11 @@ public class SearchImage {
     private int targetHeight;
     private Context mContext;
 
+    private int selfSearchAreaX = -1;
+    private int selfSearchAreaY = -1;
+    private int selfSearchAreaWidth = -1;
+    private int selfSearchAreaHeight = -1;
+
     public SearchImage() {
     }
 
@@ -28,16 +33,32 @@ public class SearchImage {
         int height = bigBt.getHeight();
         ArrayList<PositionBean> characteristicPoint = getCharacteristicPoint(smallBt);
         if (characteristicPoint != null) {
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) {
-                    int pixel = bigBt.getPixel(i, j);
+            if (selfSearchAreaX != -1 && selfSearchAreaY != -1) {//自定义搜索区域
+                int SearchEndX = selfSearchAreaX + selfSearchAreaWidth;
+                int SearchEndY = selfSearchAreaY + selfSearchAreaHeight;
+                for (int i = selfSearchAreaX; i < SearchEndX; i++) {
+                    for (int j = selfSearchAreaY; j < SearchEndY; j++) {
+                        int pixel = bigBt.getPixel(i, j);
 //                    int r = (pixel & 0xff0000) >> 16;
 //                    int g = (pixel & 0xff00) >> 8;
 //                    int b = (pixel & 0xff);
-                    //依次对比5个点。
-                    searchTraget(result, bigBt, characteristicPoint, i, j, pixel);
+                        //依次对比5个点。
+                        searchTraget(result, bigBt, characteristicPoint, i, j, pixel);
+                    }
+                }
+            } else {//全范围搜索
+                for (int i = 0; i < width; i++) {
+                    for (int j = 0; j < height; j++) {
+                        int pixel = bigBt.getPixel(i, j);
+//                    int r = (pixel & 0xff0000) >> 16;
+//                    int g = (pixel & 0xff00) >> 8;
+//                    int b = (pixel & 0xff);
+                        //依次对比5个点。
+                        searchTraget(result, bigBt, characteristicPoint, i, j, pixel);
+                    }
                 }
             }
+
         }
 
         if (result.size() > 0) {
