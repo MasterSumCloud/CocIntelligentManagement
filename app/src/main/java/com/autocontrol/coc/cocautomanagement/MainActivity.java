@@ -1,8 +1,10 @@
 package com.autocontrol.coc.cocautomanagement;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.autocontrol.coc.cocautomanagement.imagesearch.ImagePHash;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +47,25 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        File externalStorageDirectory = Environment.getExternalStorageDirectory();
+        System.out.println("内存卡路径" + externalStorageDirectory.getAbsolutePath());
+        String path1 = externalStorageDirectory.getAbsolutePath() + "/cocl.png";
+        String path2 = externalStorageDirectory.getAbsolutePath() + "/cocl-ai.png";
+
+        ImagePHash p = new ImagePHash();
+        String image1;
+        String image2;
+        try {
+            image1 = p.getHash(path1);
+            image2 = p.getHash(path2);
+            System.out.println("得分为 " + p.distance(image1, image2));
+        } catch (Exception e) {
+            Log.e("搓搓粗偶", e.toString());
+            e.printStackTrace();
+        }
+
     }
 
     @Override
