@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * Created by pengyan on 14/09/2018.
+ * Created by mac_py on 14/09/2018.
  */
 
 public class BitmapUtils {

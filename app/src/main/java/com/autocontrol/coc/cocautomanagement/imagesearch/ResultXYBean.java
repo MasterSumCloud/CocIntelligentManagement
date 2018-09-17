@@ -1,7 +1,9 @@
 package com.autocontrol.coc.cocautomanagement.imagesearch;
 
+import android.text.TextUtils;
+
 /**
- * Created by pengyan on 14/09/2018.
+ * Created by mac_py on 14/09/2018.
  */
 
 public class ResultXYBean {
