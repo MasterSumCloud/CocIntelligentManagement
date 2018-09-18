@@ -1,5 +1,6 @@
 package com.autocontrol.coc.cocautomanagement;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,8 @@ import android.view.MenuItem;
 import com.autocontrol.coc.cocautomanagement.imagesearch.ImagePHash;
 import com.autocontrol.coc.cocautomanagement.imagesearch.ResultXYBean;
 import com.autocontrol.coc.cocautomanagement.imagesearch.SearchImage;
+import com.autocontrol.coc.cocautomanagement.service.LongRunningService;
+import com.autocontrol.coc.cocautomanagement.service.SystemManager;
 import com.autocontrol.coc.cocautomanagement.utils.GsonUtil;
 
 import java.io.File;
@@ -53,6 +56,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+        //获取root权限
+        String apkRoot = "chmod 777 " + getPackageCodePath();
+        SystemManager.RootCommand(apkRoot);
+        //启动请示开战检测
+        Intent serintent = new Intent(this, LongRunningService.class);
+        startService(serintent);
 
     }
 
