@@ -9,10 +9,14 @@ import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.blankj.utilcode.util.SizeUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -23,7 +27,7 @@ public class LiveWindowManager {
     /**
      * 小悬浮窗View的实例
      */
-//    private static LiveWindowView smallWindow;
+    private static LiveWindowView smallWindow;
 
     /**
      * 小悬浮窗View的参数
@@ -40,7 +44,6 @@ public class LiveWindowManager {
      */
     private static ActivityManager mActivityManager;
     private static WindowManager windowManager;
-    private static DragFloatingActionButton dragFloatingActionButton;
 
     /**
      * 创建一个小悬浮窗。初始位置为屏幕的右部中间位置。
@@ -57,19 +60,19 @@ public class LiveWindowManager {
                 context.startActivity(intent);
             } else {
                 //执行6.0以上绘制代码
-                if (dragFloatingActionButton == null) {
-                    dragFloatingActionButton = new DragFloatingActionButton(context);
+                if (smallWindow == null) {
+                    smallWindow = new LiveWindowView(context);
                     setWindowParams(context);
-                    windowManager.addView(dragFloatingActionButton, smallWindowParams);
+                    windowManager.addView(smallWindow, smallWindowParams);
                 }
             }
             return true;
         } else {
             if (getAppOps(context)) {
-                if (dragFloatingActionButton == null) {
-                    dragFloatingActionButton = new DragFloatingActionButton(context);
+                if (smallWindow == null) {
+                    smallWindow = new LiveWindowView(context);
                     setWindowParams(context);
-                    windowManager.addView(dragFloatingActionButton, smallWindowParams);
+                    windowManager.addView(smallWindow, smallWindowParams);
                 }
                 return true;
             } else {
@@ -126,13 +129,14 @@ public class LiveWindowManager {
         smallWindowParams.softInputMode = LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
         smallWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE;
         smallWindowParams.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+//        dragFloatingActionButton.setSize(FloatingActionButton.SIZE_MINI);
         //小窗口摆放的位置，手机屏幕中央
-//        smallWindowParams.x = screenWidth - LiveWindowView.viewWidth;
-//        smallWindowParams.y = screenHeight - LiveWindowView.viewHeight;
-//        smallWindowParams.width = LiveWindowView.viewWidth;
-//        smallWindowParams.height = LiveWindowView.viewHeight;
+        smallWindowParams.x = screenWidth - LiveWindowView.viewWidth;
+        smallWindowParams.y = screenHeight - LiveWindowView.viewHeight;
+        smallWindowParams.width = LiveWindowView.viewWidth;
+        smallWindowParams.height = LiveWindowView.viewHeight;
 
-        dragFloatingActionButton.setLayoutParams(smallWindowParams);    //  TWSF0355.2DW1
+        smallWindow.setParams(smallWindowParams);    //  TWSF0355.2DW1
     }
 
 
@@ -142,10 +146,10 @@ public class LiveWindowManager {
      * @param context 必须为全局上下文
      */
     public static void removeSmallWindow(Context context) {
-        if (dragFloatingActionButton != null) {
+        if (smallWindow != null) {
             WindowManager windowManager = getWindowManager(context);
-            windowManager.removeView(dragFloatingActionButton);
-            dragFloatingActionButton = null;
+            windowManager.removeView(smallWindow);
+            smallWindow = null;
             smallWindowParams = null;
         }
     }
@@ -156,7 +160,7 @@ public class LiveWindowManager {
      * @return 有悬浮窗显示在桌面上返回true，没有的话返回false。
      */
     public static boolean isWindowShowing() {
-        return dragFloatingActionButton != null;
+        return smallWindow != null;
     }
 
     /**
