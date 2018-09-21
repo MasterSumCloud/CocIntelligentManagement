@@ -16,6 +16,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 
 import java.io.BufferedReader;
@@ -64,6 +65,7 @@ public class LiveWindowManager {
                     smallWindow = new LiveWindowView(context);
                     setWindowParams(context);
                     windowManager.addView(smallWindow, smallWindowParams);
+//                    smallWindow.updateViewPosition(ScreenUtils.getScreenWidth()-SizeUtils.dp2px(50),ScreenUtils.getScreenHeight()-SizeUtils.dp2px(50));
                 }
             }
             return true;
@@ -130,9 +132,8 @@ public class LiveWindowManager {
         smallWindowParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE;
         smallWindowParams.gravity = Gravity.RIGHT | Gravity.BOTTOM;
 //        dragFloatingActionButton.setSize(FloatingActionButton.SIZE_MINI);
-        //小窗口摆放的位置，手机屏幕中央
-        smallWindowParams.x = screenWidth - LiveWindowView.viewWidth;
-        smallWindowParams.y = screenHeight - LiveWindowView.viewHeight;
+        smallWindowParams.x = 0;
+        smallWindowParams.y = 0;
         smallWindowParams.width = LiveWindowView.viewWidth;
         smallWindowParams.height = LiveWindowView.viewHeight;
 
