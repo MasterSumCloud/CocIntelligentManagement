@@ -8,15 +8,24 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 
+import com.autocontrol.coc.cocautomanagement.taskai.Task;
+import com.autocontrol.coc.cocautomanagement.taskai.TaskManage;
+
+import java.util.ArrayList;
+
 /**
  * Created by mac_py on 18/09/2018.
  */
 
 public class LongRunningService extends Service {
 
+    private TaskManage taskManage;
+    private Thread thread;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        taskManage = new TaskManage(getApplicationContext());
     }
 
 
@@ -30,15 +39,24 @@ public class LongRunningService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        new Thread(new Runnable() {
+        if (thread == null) {
+            thread = new Thread(new Runnable() {
 
-            @Override
+                @Override
 
-            public void run() {
-                //TODO 执行任务
+                public void run() {
+                    while (taskManage.hasTask()) {
+                        taskManage.executeTask();
+                    }
+                }
+
+            });
+            thread.start();
+        } else {
+            if (taskManage.hasTask()) {
+                thread.start();
             }
-
-        }).start();
+        }
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
